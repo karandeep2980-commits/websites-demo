@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<style>:root{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Salon Ruelle</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a neighbourhood salon page. Split hero with a "chair board" of today's open slots, then services menu, booking, team, hours/map, reviews. */
+:root{
+  --bg:#f3f1ee; --surface:#ffffff; --ink:#1f1d24; --muted:#615b68; --line:#dcd6dd;
+  --accent:#6b2f4f; --accent-ink:#ffffff; --soft:#ece3ea; --ok:#2f6b4f;
+  --display:"Instrument Serif", Georgia, "Times New Roman", serif;
+  --body:"Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#17151a; --surface:#211e25; --ink:#f1edf2; --muted:#b4abb8; --line:#3a3540;
+  --accent:#d896b8; --accent-ink:#1f1018; --soft:#2e2530; --ok:#7fc9a4; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17151a; --surface:#211e25; --ink:#f1edf2; --muted:#b4abb8; --line:#3a3540;
+  --accent:#d896b8; --accent-ink:#1f1018; --soft:#2e2530; --ok:#7fc9a4; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.05;text-wrap:balance;margin:0}
+h2{font-size:clamp(2rem,4.5vw,3rem)}
+.eyebrow{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+button,.btn{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+.demo{background:var(--ink);color:var(--bg);font-size:.8rem;text-align:center}
+.demo .wrap{padding-block:7px}
+
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+header .wrap{display:flex;align-items:center;gap:20px;padding-block:14px}
+.logo{font-family:var(--display);font-size:1.7rem;text-decoration:none;letter-spacing:-.01em}
+.logo i{color:var(--accent)}
+nav{display:flex;gap:22px;margin-left:auto;font-size:.92rem}
+nav a{text-decoration:none;color:var(--muted)}
+nav a:hover{color:var(--ink)}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{background:none;border:0;padding:5px 11px;font-size:.8rem;font-weight:700;color:var(--muted)}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:12px 22px;font-weight:600;text-decoration:none}
+.btn.ghost{background:none;color:var(--ink);border:1px solid var(--line)}
+@media (max-width:760px){nav{display:none}.lang{margin-left:auto}header .btn{display:none}}
+
+.hero .wrap{display:grid;grid-template-columns:1.2fr .9fr;gap:48px;padding-block:64px 56px;align-items:center}
+.hero h1{font-size:clamp(2.8rem,7vw,5.4rem);letter-spacing:-.02em}
+.hero h1 em{color:var(--accent)}
+.hero p.lead{font-size:1.12rem;color:var(--muted);max-width:46ch;margin:22px 0 28px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.facts{display:flex;flex-wrap:wrap;gap:28px;margin-top:36px;font-size:.88rem;color:var(--muted)}
+.facts b{display:block;color:var(--ink);font-size:1.4rem;font-family:var(--display);font-weight:400}
+.board{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px;min-width:0}
+.board h3{font-family:var(--body);font-size:.95rem;font-weight:700;display:flex;justify-content:space-between;gap:8px}
+.board h3 span{color:var(--ok);font-weight:600;font-size:.8rem}
+.chairs{display:grid;gap:10px;margin-top:16px}
+.chair{display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:center}
+.av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--soft);color:var(--accent);font-weight:700;font-size:.85rem}
+.slots{display:flex;flex-wrap:wrap;gap:6px}
+.slot{font-size:.78rem;border:1px solid var(--line);border-radius:6px;padding:3px 8px;font-variant-numeric:tabular-nums;background:none;color:var(--ink)}
+.slot:hover{border-color:var(--accent);color:var(--accent)}
+.slot.taken{text-decoration:line-through;color:var(--muted);opacity:.55;cursor:default}
+.board small{display:block;margin-top:14px;color:var(--muted);font-size:.78rem}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr;padding-block:40px}}
+
+section{padding-block:72px}
+section.alt{background:var(--surface);border-block:1px solid var(--line)}
+.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:16px;margin-bottom:36px}
+.sec-head p{color:var(--muted);max-width:44ch;margin:0}
+
+.menu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 56px}
+.menu h3{font-size:1.6rem;grid-column:1/-1;margin-top:18px;color:var(--accent);font-style:italic}
+.menu h3:first-child{margin-top:0}
+.item{display:flex;gap:10px;align-items:baseline;padding-block:10px;border-bottom:1px dashed var(--line)}
+.item .n{font-weight:600}
+.item .d{display:block;font-size:.85rem;color:var(--muted);font-weight:400}
+.item .dots{flex:1}
+.item .p{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+@media (max-width:700px){.menu{grid-template-columns:1fr}}
+
+.book{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.panel{background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:24px;min-width:0}
+.panel label{display:block;font-size:.8rem;font-weight:700;margin:14px 0 6px}
+.panel label:first-child{margin-top:0}
+select,input{width:100%;font:inherit;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.day{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:8px 0;font-size:.78rem;line-height:1.2}
+.day b{display:block;font-size:1.05rem}
+.day[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.day:disabled{opacity:.4;cursor:default}
+.times{display:flex;flex-wrap:wrap;gap:6px}
+.times .slot{padding:7px 12px;font-size:.85rem;border-radius:8px}
+.times .slot[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.summary{display:flex;flex-direction:column;gap:14px}
+.summary dl{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:0;font-size:.95rem}
+.summary dt{color:var(--muted)}
+.summary dd{margin:0;font-weight:600;text-align:right}
+.total{border-top:1px solid var(--line);padding-top:12px;display:flex;justify-content:space-between;font-size:1.1rem;font-weight:700}
+.confirm{background:var(--soft);border-radius:12px;padding:14px;font-size:.92rem}
+@media (max-width:800px){.book{grid-template-columns:1fr}}
+
+.team{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.member .ph{aspect-ratio:4/5;max-width:100%;border-radius:14px;background:var(--soft);display:grid;place-items:center;font-family:var(--display);font-size:4rem;color:var(--accent);position:relative;overflow:hidden}
+.member .ph::after{content:"";position:absolute;inset:auto -20% -30% -20%;height:60%;border-radius:50%;background:var(--accent);opacity:.12}
+.member h3{font-size:1.6rem;margin-top:14px}
+.member p{margin:4px 0 0;color:var(--muted);font-size:.92rem}
+@media (max-width:760px){.team{grid-template-columns:1fr}}
+
+.visit{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+td{padding:9px 0;border-bottom:1px solid var(--line)}
+td:last-child{text-align:right}
+tr.today td{font-weight:700;color:var(--accent)}
+.map{border-radius:18px;border:1px solid var(--line);background:
+  linear-gradient(90deg,transparent 48%,var(--line) 48% 52%,transparent 52%),
+  linear-gradient(0deg,transparent 30%,var(--line) 30% 33%,transparent 33%),
+  linear-gradient(0deg,transparent 70%,var(--line) 70% 72%,transparent 72%),var(--surface);
+  min-height:260px;position:relative;padding:20px;display:flex;flex-direction:column;justify-content:flex-end}
+.pin{position:absolute;left:50%;top:31%;transform:translate(-50%,-100%);background:var(--accent);color:var(--accent-ink);padding:6px 12px;border-radius:999px;font-size:.8rem;font-weight:700;white-space:nowrap}
+.addr{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:.92rem;position:relative}
+@media (max-width:800px){.visit{grid-template-columns:1fr}}
+
+.reviews{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+blockquote{margin:0;font-family:var(--display);font-size:1.45rem;line-height:1.25}
+.who{margin-top:12px;font-size:.85rem;color:var(--muted)}
+.stars{color:var(--accent);letter-spacing:2px;font-size:.9rem}
+@media (max-width:800px){.reviews{grid-template-columns:1fr}}
+
+footer{padding-block:40px;font-size:.88rem;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
+@media (prefers-reduced-motion:no-preference){.btn,.slot,.day{transition:background .15s,color .15s,border-color .15s}}
+</style>
+
+<style>
+.wm{position:fixed;inset:0;z-index:50;pointer-events:none;overflow:hidden}
+.wm div{position:absolute;left:-50%;top:-50%;width:200%;height:200%;transform:rotate(-28deg);display:flex;flex-wrap:wrap;align-content:flex-start;gap:70px 90px;
+ font-family:var(--body);font-weight:700;font-size:clamp(1.1rem,2.6vw,1.7rem);letter-spacing:.2em;color:var(--ink);opacity:.09;white-space:nowrap;user-select:none}
+.offer{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--accent);color:var(--accent-ink);font-size:.9rem;
+ padding-block:10px calc(10px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));text-align:center;font-weight:600}
+body{padding-bottom:56px}
+</style>
+<div class="wm" aria-hidden="true"><div><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span><span>SAMPLE · ÉCHANTILLON</span></div></div>
+<div class="offer" id="offer">Exemple de site par Karan · Votre site à partir de 300 $ · Sample website by Karan · Your site from $300</div>
+<div class="demo"><div class="wrap" data-i18n="demo"></div></div>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="#top">Salon <i>Ruelle</i></a>
+    <nav>
+      <a href="#services" data-i18n="nav1"></a>
+      <a href="#reserver" data-i18n="nav2"></a>
+      <a href="#equipe" data-i18n="nav3"></a>
+      <a href="#visite" data-i18n="nav4"></a>
+    </nav>
+    <div class="lang" role="group" aria-label="Langue / Language">
+      <button id="lang-fr" aria-pressed="true">FR</button>
+      <button id="lang-en" aria-pressed="false">EN</button>
+    </div>
+    <a class="btn" href="#reserver" data-i18n="book"></a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero"><div class="wrap">
+    <div>
+      <div class="eyebrow" data-i18n="heroEyebrow"></div>
+      <h1 data-i18n-html="heroTitle"></h1>
+      <p class="lead" data-i18n="heroLead"></p>
+      <div class="cta">
+        <a class="btn" href="#reserver" data-i18n="bookOnline"></a>
+        <a class="btn ghost" href="#services" data-i18n="seePrices"></a>
+      </div>
+      <div class="facts">
+        <div><b>4,9 ★</b><span data-i18n="fact1"></span></div>
+        <div><b>2014</b><span data-i18n="fact2"></span></div>
+        <div><b>Laurier</b><span data-i18n="fact3"></span></div>
+      </div>
+    </div>
+    <aside class="board" aria-label="Disponibilités">
+      <h3><span style="color:var(--ink)" data-i18n="boardTitle"></span><span data-i18n="boardLive"></span></h3>
+      <div class="chairs" id="chairs"></div>
+      <small data-i18n="boardNote"></small>
+    </aside>
+  </div></div>
+
+  <section class="alt" id="services"><div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow" data-i18n="svcEyebrow"></div><h2 data-i18n="svcTitle"></h2></div>
+      <p data-i18n="svcNote"></p>
+    </div>
+    <div class="menu" id="menu"></div>
+  </div></section>
+
+  <section id="reserver"><div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow" data-i18n="bookEyebrow"></div><h2 data-i18n="bookTitle"></h2></div>
+      <p data-i18n="bookNote"></p>
+    </div>
+    <div class="book">
+      <form class="panel" id="bookform">
+        <label for="svc" data-i18n="fService"></label>
+        <select id="svc"></select>
+        <label for="who" data-i18n="fStylist"></label>
+        <select id="who"></select>
+        <label data-i18n="fDay"></label>
+        <div class="days" id="days"></div>
+        <label data-i18n="fTime"></label>
+        <div class="times" id="times"></div>
+        <label for="nm" data-i18n="fName"></label>
+        <input id="nm" autocomplete="name" placeholder="Camille Tremblay">
+      </form>
+      <div class="panel summary">
+        <div class="eyebrow" data-i18n="sumTitle"></div>
+        <dl id="sum"></dl>
+        <div class="total"><span data-i18n="sumTotal"></span><span id="tot"></span></div>
+        <button class="btn" id="go" type="button" style="justify-content:center" data-i18n="confirm"></button>
+        <div class="confirm" id="done" hidden></div>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="alt" id="equipe"><div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow" data-i18n="teamEyebrow"></div><h2 data-i18n="teamTitle"></h2></div>
+    </div>
+    <div class="team" id="team"></div>
+  </div></section>
+
+  <section id="visite"><div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow" data-i18n="visitEyebrow"></div><h2 data-i18n="visitTitle"></h2></div>
+    </div>
+    <div class="visit">
+      <div>
+        <table><tbody id="hours"></tbody></table>
+        <p style="color:var(--muted);font-size:.9rem;margin-top:18px" data-i18n="visitNote"></p>
+      </div>
+      <div class="map" aria-hidden="true">
+        <span class="pin">Salon Ruelle</span>
+        <div class="addr"><b>Avenue Laurier Est</b><br><span data-i18n="addr"></span><br>514 555-0142</div>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="alt"><div class="wrap">
+    <div class="sec-head"><div><div class="eyebrow" data-i18n="revEyebrow"></div><h2 data-i18n="revTitle"></h2></div></div>
+    <div class="reviews" id="reviews"></div>
+  </div></section>
+</main>
+
+<footer><div class="wrap">
+  <span>© Salon Ruelle · Plateau-Mont-Royal, Montréal</span>
+  <span data-i18n="footer"></span>
+</div></footer>
+
+<script>
+const T = {
+fr:{
+ demo:"ÉCHANTILLON. Salon Ruelle est un commerce fictif. Ce design peut devenir votre site.",
+ nav1:"Services",nav2:"Réserver",nav3:"Équipe",nav4:"Nous trouver",
+ book:"Réserver",bookOnline:"Réserver en ligne",seePrices:"Voir les tarifs",
+ heroEyebrow:"Salon de coiffure · Plateau-Mont-Royal",
+ heroTitle:"Une coupe qui vous <em>ressemble</em>, à deux pas de Laurier.",
+ heroLead:"Coupe, couleur et soins pour toutes les textures de cheveux. Réservez en 30 secondes, sans appeler.",
+ fact1:"sur 212 avis Google",fact2:"dans le quartier",fact3:"métro Laurier, 4 min",
+ boardTitle:"Disponibilités aujourd'hui",boardNext:"Disponibilités",boardLive:"● En direct",
+ boardNote:"Touchez une heure libre pour la réserver.",
+ svcEyebrow:"Tarifs",svcTitle:"Services et prix",svcNote:"Prix avant taxes. Le prix final dépend de la longueur et de l'épaisseur des cheveux.",
+ bookEyebrow:"Réservation",bookTitle:"Choisissez votre moment",bookNote:"Confirmation par texto. Annulation gratuite jusqu'à 24 h avant.",
+ fService:"Service",fStylist:"Coiffeur·euse",fDay:"Jour",fTime:"Heure",fName:"Votre nom",
+ anyone:"Peu importe",
+ sumTitle:"Votre rendez-vous",sumTotal:"Total estimé (avant taxes)",
+ sService:"Service",sStylist:"Avec",sWhen:"Quand",sLen:"Durée",
+ pick:"À choisir",confirm:"Confirmer la réservation",
+ done:n=>`Merci${n?", "+n:""} ! Dans un vrai site, vous recevriez maintenant une confirmation par texto. (Démo : aucune réservation n'est envoyée.)`,
+ needAll:"Choisissez un jour et une heure pour continuer.",
+ closed:"Fermé",
+ teamEyebrow:"L'équipe",teamTitle:"Trois chaises, trois spécialités",
+ visitEyebrow:"Nous trouver",visitTitle:"Heures et adresse",
+ visitNote:"Stationnement sur rue. Accessible avec poussette. Paiement par carte, débit ou Apple Pay.",
+ addr:"Montréal (QC) · Plateau-Mont-Royal",
+ revEyebrow:"Avis",revTitle:"Ce que disent les clients",
+ footer:"Site de démonstration conçu par Karan",
+ min:"min"
+},
+en:{
+ demo:"SAMPLE. Salon Ruelle is a fictional business. This design can become your website.",
+ nav1:"Services",nav2:"Book",nav3:"Team",nav4:"Visit",
+ book:"Book now",bookOnline:"Book online",seePrices:"See prices",
+ heroEyebrow:"Hair salon · Plateau-Mont-Royal",
+ heroTitle:"A haircut that feels like <em>you</em>, steps from Laurier.",
+ heroLead:"Cuts, colour and treatments for every hair texture. Book in 30 seconds, no phone call needed.",
+ fact1:"from 212 Google reviews",fact2:"in the neighbourhood",fact3:"Laurier metro, 4 min",
+ boardTitle:"Open today",boardNext:"Open",boardLive:"● Live",
+ boardNote:"Tap a free time to book it.",
+ svcEyebrow:"Prices",svcTitle:"Services and prices",svcNote:"Prices before tax. Final price depends on hair length and thickness.",
+ bookEyebrow:"Booking",bookTitle:"Pick your time",bookNote:"Confirmation by text. Free cancellation up to 24 h before.",
+ fService:"Service",fStylist:"Stylist",fDay:"Day",fTime:"Time",fName:"Your name",
+ anyone:"No preference",
+ sumTitle:"Your appointment",sumTotal:"Estimated total (before tax)",
+ sService:"Service",sStylist:"With",sWhen:"When",sLen:"Length",
+ pick:"Choose",confirm:"Confirm booking",
+ done:n=>`Thanks${n?", "+n:""}! On a live site you would now get a text confirmation. (Demo: no booking is sent.)`,
+ needAll:"Pick a day and a time to continue.",
+ closed:"Closed",
+ teamEyebrow:"The team",teamTitle:"Three chairs, three specialties",
+ visitEyebrow:"Visit",visitTitle:"Hours and address",
+ visitNote:"Street parking. Stroller friendly. Card, debit or Apple Pay.",
+ addr:"Montreal, QC · Plateau-Mont-Royal",
+ revEyebrow:"Reviews",revTitle:"What clients say",
+ footer:"Demo website designed by Karan",
+ min:"min"
+}};
+
+const SERVICES=[
+ {g:{fr:"Coupes",en:"Cuts"}},
+ {id:"cf",fr:"Coupe femme",en:"Women's cut",dfr:"Shampoing, coupe, mise en plis",den:"Wash, cut and blow-dry",p:68,m:60},
+ {id:"ch",fr:"Coupe homme",en:"Men's cut",dfr:"Ciseaux ou tondeuse, finition",den:"Scissors or clippers, finish",p:42,m:40},
+ {id:"ce",fr:"Coupe enfant (12 ans et moins)",en:"Kids' cut (12 and under)",dfr:"",den:"",p:30,m:30},
+ {id:"fr",fr:"Frange",en:"Bang trim",dfr:"Entre deux coupes",den:"Between cuts",p:15,m:15},
+ {g:{fr:"Couleur",en:"Colour"}},
+ {id:"cr",fr:"Couleur racines",en:"Root colour",dfr:"Repousse jusqu'à 2 cm",den:"Regrowth up to 2 cm",p:85,m:90},
+ {id:"ba",fr:"Balayage",en:"Balayage",dfr:"À main levée, avec patine",den:"Hand-painted, with toner",p:190,m:180},
+ {id:"pa",fr:"Patine / gloss",en:"Toner / gloss",dfr:"",den:"",p:45,m:30},
+ {g:{fr:"Soins",en:"Treatments"}},
+ {id:"so",fr:"Soin profond Olaplex",en:"Olaplex deep treatment",dfr:"Ajout à tout service",den:"Add to any service",p:35,m:20},
+ {id:"bo",fr:"Boucles et frisés",en:"Curly cut",dfr:"Coupe à sec, méthode bouclée",den:"Dry cut, curl method",p:85,m:75},
+];
+const TEAM=[
+ {i:"MA",n:"Maude",fr:"Couleur et balayage. 11 ans d'expérience.",en:"Colour and balayage. 11 years' experience."},
+ {i:"KO",n:"Kofi",fr:"Coupes homme, dégradés et barbe.",en:"Men's cuts, fades and beards."},
+ {i:"LU",n:"Lucía",fr:"Cheveux bouclés et frisés. Parle français, anglais, espagnol.",en:"Curly and coily hair. Speaks French, English, Spanish."},
+];
+const REVIEWS=[
+ {q:{fr:"Maude a enfin compris ce que je voulais pour mon balayage.",en:"Maude finally understood what I wanted for my balayage."},w:"Julie B. · Google"},
+ {q:{fr:"Réservé à 22 h sur mon téléphone, coupé le lendemain midi.",en:"Booked at 10 pm on my phone, cut the next day at noon."},w:"Marc-André L. · Google"},
+ {q:{fr:"Lucía connaît vraiment les cheveux bouclés. Je ne vais plus ailleurs.",en:"Lucía really knows curly hair. I don't go anywhere else now."},w:"Aïcha D. · Google"},
+];
+// Mon=1 ... Sun=0. [open, close] in hours, null = closed
+const HOURS={1:null,2:[10,18],3:[10,20],4:[10,20],5:[9,18],6:[9,16],0:null};
+const DAYN={fr:["dim.","lun.","mar.","mer.","jeu.","ven.","sam."],en:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]};
+const DAYL={fr:["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"],en:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]};
+
+let lang="fr";let boardDay=null;
+try{const s=localStorage.getItem("ruelle-lang");if(s==="en"||s==="fr")lang=s}catch(e){}
+const st={svc:"cf",who:"any",day:null,time:null};
+
+const money=v=>lang==="fr"?`${v} $`:`$${v}`;
+const fmtT=h=>{const H=Math.floor(h),M=h%1?"30":"00";return lang==="fr"?`${H} h ${M}`:`${H}:${M}`};
+// deterministic "taken" pattern so the board looks lived-in
+const taken=(seed,h)=>((seed*7+Math.round(h*2)*13)%5)<2;
+
+function render(){
+ document.documentElement.lang=lang;
+ const t=T[lang];
+ document.querySelectorAll("[data-i18n]").forEach(el=>{const v=t[el.dataset.i18n];if(typeof v==="string")el.textContent=v});
+ document.querySelectorAll("[data-i18n-html]").forEach(el=>el.innerHTML=t[el.dataset.i18nHtml]);
+ document.getElementById("lang-fr").setAttribute("aria-pressed",lang==="fr");
+ document.getElementById("lang-en").setAttribute("aria-pressed",lang==="en");
+
+ // menu
+ document.getElementById("menu").innerHTML=SERVICES.map(s=>s.g?`<h3>${s.g[lang]}</h3>`:
+  `<div class="item"><span class="n">${s[lang]}${s["d"+lang]?`<span class="d">${s["d"+lang]}</span>`:""}</span><span class="dots"></span><span class="p">${money(s.p)}</span></div>`).join("");
+
+ // board
+ const today=new Date();const dow=today.getDay();
+ const bd=new Date(today);while(!HOURS[bd.getDay()])bd.setDate(bd.getDate()+1);boardDay=bd.toDateString();const hrs=HOURS[bd.getDay()];
+ const isToday=bd.toDateString()===today.toDateString();
+ document.querySelector('[data-i18n="boardTitle"]').textContent=isToday?t.boardTitle:`${t.boardNext} ${DAYL[lang][bd.getDay()].toLowerCase()}`;
+ document.getElementById("chairs").innerHTML=TEAM.map((m,k)=>{
+  let slots="";for(let h=Math.max(hrs[0],13);h<hrs[1]&&h<Math.max(hrs[0],13)+4;h+=.5){
+   const tk=taken(k+3,h);slots+=`<button class="slot${tk?" taken":""}" ${tk?"disabled":""} data-who="${k}" data-h="${h}">${fmtT(h)}</button>`}
+  return `<div class="chair"><div class="av">${m.i}</div><div><div style="font-weight:600;font-size:.9rem">${m.n}</div><div class="slots">${slots}</div></div></div>`}).join("");
+
+ // form selects
+ const svc=document.getElementById("svc");
+ svc.innerHTML=SERVICES.filter(s=>!s.g).map(s=>`<option value="${s.id}">${s[lang]} · ${money(s.p)}</option>`).join("");svc.value=st.svc;
+ const who=document.getElementById("who");
+ who.innerHTML=`<option value="any">${t.anyone}</option>`+TEAM.map((m,k)=>`<option value="${k}">${m.n}</option>`).join("");who.value=st.who;
+
+ // days: next 7
+ let dh="";for(let i=0;i<7;i++){const d=new Date(today);d.setDate(today.getDate()+i);const key=d.toDateString();const open=HOURS[d.getDay()];
+  dh+=`<button type="button" class="day" data-d="${key}" ${open?"":"disabled"} aria-pressed="${st.day===key}">${DAYN[lang][d.getDay()]}<b>${d.getDate()}</b></button>`}
+ document.getElementById("days").innerHTML=dh;
+ renderTimes();
+
+ // team
+ document.getElementById("team").innerHTML=TEAM.map(m=>`<div class="member"><div class="ph">${m.n[0]}</div><h3>${m.n}</h3><p>${m[lang]}</p></div>`).join("");
+ // hours
+ document.getElementById("hours").innerHTML=[1,2,3,4,5,6,0].map(d=>{const h=HOURS[d];
+  return `<tr class="${d===dow?"today":""}"><td>${DAYL[lang][d]}</td><td>${h?fmtT(h[0])+" – "+fmtT(h[1]):t.closed}</td></tr>`}).join("");
+ // reviews
+ document.getElementById("reviews").innerHTML=REVIEWS.map(r=>`<figure style="margin:0"><div class="stars">★★★★★</div><blockquote>« ${r.q[lang]} »</blockquote><div class="who">${r.w}</div></figure>`).join("");
+ renderSum();
+}
+function renderTimes(){
+ const el=document.getElementById("times");
+ if(!st.day){el.innerHTML=`<span style="color:var(--muted);font-size:.88rem">${T[lang].needAll}</span>`;return}
+ const d=new Date(st.day);const h=HOURS[d.getDay()];if(!h){el.innerHTML="";return}let out="";
+ const seed=d.getDate()+(st.who==="any"?0:+st.who);
+ for(let x=h[0];x<h[1];x+=.5){if(taken(seed,x))continue;out+=`<button type="button" class="slot" data-t="${x}" aria-pressed="${st.time===x}">${fmtT(x)}</button>`}
+ el.innerHTML=out;
+}
+function renderSum(){
+ const t=T[lang];const s=SERVICES.find(x=>x.id===st.svc);
+ const who=st.who==="any"?t.anyone:TEAM[+st.who].n;
+ let when=t.pick;if(st.day){const d=new Date(st.day);when=`${DAYL[lang][d.getDay()]} ${d.getDate()}`+(st.time!=null?` · ${fmtT(st.time)}`:"")}
+ document.getElementById("sum").innerHTML=`<dt>${t.sService}</dt><dd>${s[lang]}</dd><dt>${t.sStylist}</dt><dd>${who}</dd><dt>${t.sWhen}</dt><dd>${when}</dd><dt>${t.sLen}</dt><dd>${s.m} ${t.min}</dd>`;
+ document.getElementById("tot").textContent=money(s.p);
+}
+function setLang(l){lang=l;try{localStorage.setItem("ruelle-lang",l)}catch(e){};document.getElementById("done").hidden=true;render()}
+document.getElementById("lang-fr").onclick=()=>setLang("fr");
+document.getElementById("lang-en").onclick=()=>setLang("en");
+document.getElementById("svc").onchange=e=>{st.svc=e.target.value;renderSum()};
+document.getElementById("who").onchange=e=>{st.who=e.target.value;st.time=null;renderTimes();renderSum()};
+document.getElementById("days").onclick=e=>{const b=e.target.closest(".day");if(!b||b.disabled)return;st.day=b.dataset.d;st.time=null;
+ document.querySelectorAll(".day").forEach(x=>x.setAttribute("aria-pressed",x===b));renderTimes();renderSum()};
+document.getElementById("times").onclick=e=>{const b=e.target.closest(".slot");if(!b)return;st.time=+b.dataset.t;
+ document.querySelectorAll("#times .slot").forEach(x=>x.setAttribute("aria-pressed",x===b));renderSum()};
+document.getElementById("chairs").onclick=e=>{const b=e.target.closest(".slot");if(!b||b.disabled)return;
+ st.who=b.dataset.who;st.day=boardDay;st.time=+b.dataset.h;render();
+ document.getElementById("reserver").scrollIntoView({behavior:"smooth"})};
+document.getElementById("bookform").onsubmit=e=>e.preventDefault();
+document.getElementById("go").onclick=()=>{const d=document.getElementById("done");d.hidden=false;
+ d.textContent=(st.day&&st.time!=null)?T[lang].done(document.getElementById("nm").value.trim()):T[lang].needAll};
+render();
+</script>
+
+</body>
+</html>
