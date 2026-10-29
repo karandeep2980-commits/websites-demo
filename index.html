@@ -352,6 +352,7 @@ const DAYL={fr:["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi
 
 let lang="fr";let boardDay=null;
 try{const s=localStorage.getItem("ruelle-lang");if(s==="en"||s==="fr")lang=s}catch(e){}
+try{const q=new URLSearchParams(location.search).get("lang");if(q==="en"||q==="fr")lang=q}catch(e){}
 const st={svc:"cf",who:"any",day:null,time:null};
 
 const money=v=>lang==="fr"?`${v} $`:`$${v}`;
