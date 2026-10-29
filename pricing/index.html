@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<style>:root{color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Website Packages</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one-page rate card. Three package columns, then monthly care plans as a table, add-ons, terms. FR/EN toggle. */
+:root{
+  --bg:#f4f3f1; --surface:#ffffff; --ink:#1d1c22; --muted:#5f5b66; --line:#dad6dc;
+  --accent:#2c4a6b; --accent-ink:#ffffff; --soft:#e6ecf2;
+  --display:"Instrument Serif", Georgia, serif;
+  --body:"Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141619; --surface:#1d2024; --ink:#eef0f3; --muted:#a9adb5; --line:#343840;
+  --accent:#9cc0e6; --accent-ink:#0d1825; --soft:#23303d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141619; --surface:#1d2024; --ink:#eef0f3; --muted:#a9adb5; --line:#343840;
+  --accent:#9cc0e6; --accent-ink:#0d1825; --soft:#23303d; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15.5px;line-height:1.6}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:40px 56px}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.08;margin:0;text-wrap:balance}
+.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:start;gap:16px}
+.eyebrow{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1{font-size:clamp(2.4rem,6vw,3.8rem);margin-top:8px}
+.lead{color:var(--muted);max-width:56ch;margin:14px 0 0;font-size:1.05rem}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{font:inherit;background:none;border:0;padding:6px 13px;font-size:.8rem;font-weight:700;color:var(--muted);cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:40px;align-items:stretch}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.plan.pop{border:2px solid var(--accent)}
+.tag{align-self:flex-start;background:var(--accent);color:var(--accent-ink);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 10px}
+.plan h2{font-size:2rem}
+.for{color:var(--muted);font-size:.9rem;margin:0;min-height:2.9em}
+.price{font-family:var(--display);font-size:2.8rem;line-height:1;font-variant-numeric:tabular-nums}
+.price small{font-family:var(--body);font-size:.85rem;color:var(--muted)}
+.meta{display:flex;gap:14px;font-size:.82rem;color:var(--muted);border-block:1px solid var(--line);padding-block:8px}
+ul{margin:0;padding:0;list-style:none;display:grid;gap:8px;font-size:.92rem}
+li{padding-left:22px;position:relative}
+li::before{content:"";position:absolute;left:2px;top:.55em;width:10px;height:6px;border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg)}
+@media (max-width:860px){.plans{grid-template-columns:1fr}.for{min-height:0}}
+
+section{margin-top:56px}
+section h2{font-size:2.2rem}
+section > p{color:var(--muted);margin:6px 0 18px;max-width:60ch}
+.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+table{width:100%;border-collapse:collapse;font-size:.92rem;min-width:520px}
+th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.n{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+td b{display:block}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
+.box h3{font-family:var(--body);font-size:1rem;font-weight:700;margin-bottom:10px}
+.terms li::before{border:0;width:6px;height:6px;border-radius:50%;background:var(--accent);transform:none;top:.6em}
+@media (max-width:760px){.cols{grid-template-columns:1fr}}
+.foot{margin-top:40px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);padding-top:16px}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div>
+      <div class="eyebrow" data-k="eyebrow"></div>
+      <h1 data-k="title"></h1>
+      <p class="lead" data-k="lead"></p>
+    </div>
+  </div>
+  <div class="plans" id="plans"></div>
+
+  <section>
+    <h2 data-k="careTitle"></h2>
+    <p data-k="careLead"></p>
+    <div class="tbl"><table><thead><tr><th data-k="thPlan"></th><th data-k="thIncl"></th><th data-k="thPrice"></th></tr></thead><tbody id="care"></tbody></table></div>
+  </section>
+
+  <section class="cols">
+    <div class="box"><h3 data-k="addTitle"></h3><table style="min-width:0"><tbody id="adds"></tbody></table></div>
+    <div class="box"><h3 data-k="termsTitle"></h3><ul class="terms" id="terms"></ul></div>
+  </section>
+
+  <p class="foot" data-k="foot"></p>
+</div>
+
+<script>
+const D={
+fr:{
+ eyebrow:"Sites web pour commerces locaux · Montréal",
+ title:"Forfaits de sites web",
+ lead:"Un site professionnel, bilingue et prêt pour Google, livré rapidement, à partir de 300 $. Prix fixes en dollars canadiens, sans surprise.",
+ popular:"Le plus choisi", from:"",
+ delivery:"Livraison", rev:"Révisions",
+ plans:[
+  {n:"Essentiel",for:"Pour être trouvé sur Google et avoir une vitrine claire.",p:"300",d:"5 jours",r:"1 ronde",
+   f:["Site d'une page, design sur mesure","Bilingue français / anglais","Adapté au cellulaire","Bouton d'appel, carte et heures d'ouverture","Formulaire de contact","Fiche Google Business optimisée","Nom de domaine et connexion configurés"]},
+  {n:"Croissance",for:"Pour recevoir des réservations ou des commandes en ligne.",p:"750",d:"10 jours",r:"2 rondes",pop:1,
+   f:["Tout le forfait Essentiel","Jusqu'à 5 pages (services, équipe, galerie, contact…)","Réservation ou menu en ligne (ex. : Fresha, Square, Calendly)","SEO local de base : titres, balises, schéma","Galerie photo et avis Google intégrés","Statistiques de visites (Google Analytics)","Formation de 30 min pour modifier vos textes"]},
+  {n:"Premium",for:"Pour une marque complète qui vend en ligne.",p:"1 500",d:"2 à 3 semaines",r:"3 rondes",
+   f:["Tout le forfait Croissance","Jusqu'à 10 pages","Rédaction des textes en français et en anglais","Boutique en ligne ou cartes-cadeaux (jusqu'à 10 produits)","SEO avancé et pages par quartier","Infolettre et capture de courriels","Conformité Loi 25 : bannière de cookies, politique de confidentialité"]}
+ ],
+ careTitle:"Hébergement et entretien",
+ careLead:"Optionnel, au mois, sans contrat. Choisissez un plan après la mise en ligne.",
+ thPlan:"Plan",thIncl:"Inclus",thPrice:"Prix",
+ care:[
+  ["Hébergement","Hébergement rapide, certificat SSL, sauvegardes hebdomadaires, surveillance","15 $ / mois"],
+  ["Entretien","Hébergement + mises à jour + jusqu'à 1 h de modifications par mois (prix, heures, photos)","35 $ / mois"],
+  ["Croissance continue","Entretien + 2 publications Google par mois + suivi SEO + rapport mensuel","99 $ / mois"]
+ ],
+ addTitle:"Options",
+ adds:[["Page supplémentaire","75 $"],["Logo simple (2 propositions)","150 $"],["Traduction d'un site existant","à partir de 150 $"],["Séance photo sur place (Montréal)","200 $"],["Nom de domaine .ca ou .com","au coût, environ 20 $ / an"]],
+ termsTitle:"Conditions",
+ terms:["Dépôt de 50 % au départ, solde à la mise en ligne","Vous êtes propriétaire de votre site et de votre domaine","Prix avant taxes (TPS et TVQ en sus, s'il y a lieu)","Délais calculés à partir de la réception de vos textes et photos","Modifications hors forfait : 45 $ / heure"],
+ foot:"Questions ou devis personnalisé : contactez Karan. Prix valides jusqu'au 31 décembre 2026."
+},
+en:{
+ eyebrow:"Websites for local businesses",
+ title:"Website packages",
+ lead:"A professional, mobile-friendly, Google-ready website, delivered fast, from $300. Fixed prices in US dollars, no surprises.",
+ popular:"Most popular",
+ delivery:"Delivery", rev:"Revisions",
+ plans:[
+  {n:"Starter",for:"Get found on Google with a clean storefront online.",p:"300",d:"5 days",r:"1 round",
+   f:["One-page site, custom design","Mobile friendly","Fast loading on any phone","Call button, map and opening hours","Contact form","Google Business Profile optimized","Domain name and connection set up"]},
+  {n:"Growth",for:"Take bookings or orders online.",p:"750",d:"10 days",r:"2 rounds",pop:1,
+   f:["Everything in Starter","Up to 5 pages (services, team, gallery, contact…)","Online booking or menu (e.g. Fresha, Square, Calendly)","Basic local SEO: titles, tags, schema","Photo gallery and Google reviews built in","Visitor stats (Google Analytics)","30-min training to edit your own text"]},
+  {n:"Premium",for:"A complete brand that sells online.",p:"1,500",d:"2 to 3 weeks",r:"3 rounds",
+   f:["Everything in Growth","Up to 10 pages","Professional copywriting","Online store or gift cards (up to 10 products)","Advanced SEO and neighbourhood pages","Newsletter and email capture","Cookie banner and privacy policy"]}
+ ],
+ careTitle:"Hosting and care plans",
+ careLead:"Optional, monthly, no contract. Pick one after launch.",
+ thPlan:"Plan",thIncl:"Includes",thPrice:"Price",
+ care:[
+  ["Hosting","Fast hosting, SSL certificate, weekly backups, uptime monitoring","$15 / month"],
+  ["Care","Hosting + updates + up to 1 h of edits per month (prices, hours, photos)","$35 / month"],
+  ["Ongoing growth","Care + 2 Google posts per month + SEO tracking + monthly report","$99 / month"]
+ ],
+ addTitle:"Add-ons",
+ adds:[["Extra page","$75"],["Simple logo (2 concepts)","$150"],["Spanish or second-language version","from $150"],[".com domain","at cost, about $20 / year"]],
+ termsTitle:"Terms",
+ terms:["50% deposit to start, balance at launch","You own your website and your domain","Prices in USD; no hidden fees","Timelines start once your text and photos are received","Work outside the package: $45 / hour"],
+ foot:"Questions or a custom quote: contact Karan. Prices valid until December 31, 2026."
+}};
+let L="en";
+function money(p){return L==="fr"?`${p} $`:`$${p}`}
+function render(){
+ const d=D[L];document.documentElement.lang=L;
+ document.querySelectorAll("[data-k]").forEach(e=>e.textContent=d[e.dataset.k]);
+ document.getElementById("plans").innerHTML=d.plans.map(p=>`<div class="plan${p.pop?" pop":""}">
+  ${p.pop?`<span class="tag">${d.popular}</span>`:""}<h2>${p.n}</h2><p class="for">${p.for}</p>
+  <div class="price">${money(p.p)} <small>USD</small></div>
+  <div class="meta"><span>${d.delivery}${L==="fr"?" :":":"} <b>${p.d}</b></span><span>${d.rev}${L==="fr"?" :":":"} <b>${p.r}</b></span></div>
+  <ul>${p.f.map(x=>`<li>${x}</li>`).join("")}</ul></div>`).join("");
+ document.getElementById("care").innerHTML=d.care.map(c=>`<tr><td><b>${c[0]}</b></td><td>${c[1]}</td><td class="n">${c[2]}</td></tr>`).join("");
+ document.getElementById("adds").innerHTML=d.adds.map(a=>`<tr><td>${a[0]}</td><td class="n" style="text-align:right">${a[1]}</td></tr>`).join("");
+ document.getElementById("terms").innerHTML=d.terms.map(t=>`<li>${t}</li>`).join("");
+}
+function set(l){L=l;try{localStorage.setItem("rate-lang",l)}catch(e){};render()}
+render();
+</script>
+
+</body>
+</html>
